@@ -1,24 +1,26 @@
 ﻿using Raylib_cs;
 
 Raylib.InitWindow(1920, 1080, "grafiktest");
-{
-    
-}
+
 Raylib.SetTargetFPS(60);
 
-
-Color hotPink = new Color(255, 105, 180, 255);
-Color whitepink = new Color(245, 160, 233, 255);
-
+int bkgSpeed = 3;
+int bkg1PosY = 0;
+int bkg2PosY = -1080;
+int speed = 10;
 
 Texture2D player = Raylib.LoadTexture("F14_1.png");
-Texture2D bkg = Raylib.LoadTexture("mil_base.png");
+Texture2D bkg1 = Raylib.LoadTexture("galax 2.png");
+Texture2D bkg2 = Raylib.LoadTexture("galax 1.png");
 Texture2D bullet = Raylib.LoadTexture("bullet_1.png");
 
 Rectangle playerRect = new Rectangle(400, 300, 64, 64);
 Rectangle bulletRect = new Rectangle((int)playerRect.x, (int)playerRect.y, 32, 32);
+Rectangle bkg1rect = new Rectangle(0, 0, (int)bkg1.width, (int)bkg1.height);
+Rectangle bkg2rect = new Rectangle(0, -1080, (int)bkg2.width, (int)bkg2.height);
 
-int speed = 5;
+
+
 //69
 while (Raylib.WindowShouldClose() == false)
 {
@@ -38,18 +40,43 @@ while (Raylib.WindowShouldClose() == false)
     {
         playerRect.y -= speed;
     }
-    if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE))
+    if(bkg1PosY > 1080)
     {
-        Raylib.DrawTexture(bullet, (int)bulletRect.x, (int)bulletRect.y, Color.BLANK);
-        bulletRect.y += 1;
+        bkg1PosY = -1080;
+    }
+    if(bkg2PosY > 1080)
+    {
+        bkg2PosY = -1080;
+    }
+    if(playerRect.x > 1920 - player.width)
+    {
+        playerRect.x = 1920 - player.width;
+    }
+    if(playerRect.x < 0)
+    {
+        playerRect.x = 0;
+    }
+    if(playerRect.y > 1080 - player.height)
+    {
+        playerRect.y = 1080 - player.height;
+    }
+    if(playerRect.y < 0)
+    {
+        playerRect.y = 0;
     }
 
-    Raylib.BeginDrawing();
-    Raylib.ClearBackground(hotPink);
+    bkg1PosY += bkgSpeed;
 
-    Raylib.DrawTexture(bkg, 0, 0, Color.WHITE);
+    bkg2PosY += bkgSpeed;
+
+    Raylib.BeginDrawing();
+    Raylib.ClearBackground(Color.BLACK);
+
+    Raylib.DrawTexture(bkg1, 0, (int)bkg1PosY, Color.WHITE);
+    Raylib.DrawTexture(bkg2, 0, (int)bkg2PosY, Color.WHITE);
+
     Raylib.DrawTexture(player, (int)playerRect.x, (int)playerRect.y, Color.GRAY);
-    
+
 
 
     Raylib.EndDrawing();
